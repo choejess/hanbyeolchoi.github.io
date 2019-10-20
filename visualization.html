@@ -1,0 +1,331 @@
+<html>
+
+<head>
+	<title>Individual Project 1 - Hanbyeol Choi</title>
+	<link rel="stylesheet" type="text/css" href="project1style.css"/>
+	
+	<script src="https://www.gstatic.com/charts/loader.js"></script>
+	
+	<script>
+		//load the visualization API and required packages
+		google.charts.load("current",{"packages":["corechart"]})
+		
+		//set a callback to run when the Google Vis API is loaded
+		google.charts.setOnLoadCallback(VisualizationSheet)
+		
+		//Specify the sheet tabs and data being used from the database
+		function VisualizationSheet() { 
+			VisualizationName("EducationCurrent","SELECT B,C,D,E,F,G",EduResponseHandler1);
+			VisualizationName("MilitaryCurrent","SELECT D,J,K,L,M,N",MilResponseHandler1);
+			VisualizationName("HealthcareCurrent","SELECT B,H,I,J,K,L",HCResponseHandler1);
+			VisualizationName("Spending2015","SELECT B,G,H,I,J",SpendingResponseHandler1);
+			VisualizationName("Compared2015","SELECT B,G,H",MilcompareResponseHandler1);
+			VisualizationName("EducationGrowth","SELECT A,E",EducationgrowthResponseHandler1);
+			VisualizationName("EducationGrowth","SELECT A,D",EducationgrowthResponseHandler2);
+			VisualizationName("HealthcareGrowth","SELECT A,E",HCgrowthResponseHandler1);
+			VisualizationName("HealthcareGrowth","SELECT A,D",HCgrowthResponseHandler2);
+			VisualizationName("EducationPP","SELECT B,G,I,N,K",EduPPResponseHandler1);
+			VisualizationName("HealthcarePP","SELECT B,L,N,T,P",HCPPResponseHandler1);
+			VisualizationName("MilitaryPP","SELECT B,L,N,U,P",MilPPResponseHandler1);
+		} 
+		
+		function VisualizationName(sheetName, query, responseHandler) { 
+			var queryString = encodeURIComponent(query)
+			var query = new google.visualization.Query(
+				"https://docs.google.com/spreadsheets/d/1wIYSJVaFYuJ-_G9xQeQxdIfZv3WCxYgLHZy3Plv7oZU/gviz/tq?sheet="+sheetName+"&headers=1&tq="+queryString);
+			query.send(responseHandler);
+		} 
+		function EduResponseHandler1(response) { 
+			//Get the Data
+			var data = response.getDataTable()
+			data.sort({column: 5, desc: true})
+			//Set the Options
+			var options = {height: 400, 
+							title: "Education Spending from 2011-2015 (Billions)",
+							vAxis: {title: "Education Spending"},
+							hAxis: {title: "Country Code"},
+							};
+			
+			//Create the Chart with the Options
+			var chart = new google.visualization.ColumnChart(
+				document.getElementById("Edugraph1")
+			)
+			//Draw the Chart
+			chart.draw(data,options)
+		}  
+		function education2ResponseHandler(response) { 
+			//Get the Data
+			var data = response.getDataTable()
+			data.sort({column: 5, desc: true})
+			//Set the Options
+			var options = {height: 400, 
+							title: "Education Spending 2011-2015 - USA",
+							vAxis: {title: "Education Spending"},
+							hAxis: {title: "Country"},
+							}
+			
+			//Create the Chart with the Options
+			var chart = new google.visualization.ColumnChart(
+				document.getElementById("education_chart2")
+			);
+			//Draw the Chart
+			chart.draw(data,options)
+		}  
+		function EduResponseHandler2(response) { 
+			var data = response.getDataTable()
+			data.sort({column: 5, desc: true})
+			var options = {height: 400, 
+							title: "Education Spending from 2011-2015 (Billions)",
+							vAxis: {title: "Education Spending"},
+							hAxis: {title: "Country"},
+							}
+			var chart = new google.visualization.ColumnChart(
+				document.getElementById("education_chart3")
+			)
+			chart.draw(data,options)
+		} 
+		function MilResponseHandler1(response) { 
+			var data = response.getDataTable()
+			data.sort({column: 5, desc: true})
+			var options = {height: 400, 
+							title: "Military Spending 2014-2018 (Billions)",
+							vAxis: {title: "Military Spending"},
+							hAxis: {title: "Country"},
+							}
+			var chart = new google.visualization.ColumnChart(
+				document.getElementById("Militarygraph")
+			)
+			chart.draw(data,options)
+		} 
+		function military2ResponseHandler(response) { 
+			var data = response.getDataTable()
+			data.sort({column: 5, desc: true})
+			var options = {height: 400, 
+							title: "Military Spending from 2014-2018 (Billions) - USA and China",
+							vAxis: {title: "Military Spending"},
+							hAxis: {title: "Country"},
+							}
+			var chart = new google.visualization.ColumnChart(
+				document.getElementById("military_chart2")
+			)
+			chart.draw(data,options); 
+		} 
+		function MilResponseHandler2(response) { 
+			var data = response.getDataTable()
+			data.sort({column: 5, desc: true})
+			var options = {height: 400, 
+							title: "Military Spending from 2014-2018 (Billions)",
+							vAxis: {title: "Military Spending"},
+							hAxis: {title: "Country Code"},
+							}
+			var chart = new google.visualization.ColumnChart(
+				document.getElementById("military_chart3")
+			)
+			chart.draw(data,options)
+		} 
+		function HCResponseHandler1(response) { 
+			var data = response.getDataTable()
+			data.sort({column: 5, desc: true})
+			var options = {height: 400,
+							title: "Healthcare Spending 2014-2018 (Billions)",
+							vAxis: {title: "Healthcare Spending)"},
+							hAxis: {title: "Country"},
+							}
+			var chart = new google.visualization.ColumnChart(
+				document.getElementById("Healthcaregraph")
+			)
+			chart.draw(data,options)
+		} 
+		function health2ResponseHandler(response) { 
+			var data = response.getDataTable() 
+			data.sort({column: 5, desc: true}) 
+			var options = {height: 400, 
+							title: "Healthcare Spending 2014-2018 (Billions) - USA",
+							vAxis: {title: "Healthcare Spending"},
+							hAxis: {title: "Country"},
+							};
+			var chart = new google.visualization.ColumnChart(
+				document.getElementById("health_chart2")
+			)
+			chart.draw(data,options)
+		} 
+		function HCResponseHandler2(response) { 
+			var data = response.getDataTable()
+			data.sort({column: 5, desc: true})
+			var options = {height: 400, 
+							title: "Healthcare Spending 2014-2018 (Billions)",
+							vAxis: {title: "Healthcare Spending)"},
+							hAxis: {title: "Country"},
+							}
+			var chart = new google.visualization.ColumnChart(
+				document.getElementById("health_chart3")
+			);
+			chart.draw(data,options)
+		} 
+		function SpendingResponseHandler1(response) { 
+			var data = response.getDataTable()
+			data.sort({column: 4, desc: true})
+			var options = {height: 400, 
+							title: "Education, Healthcare, and Military Spending as a Percentage of GDP (2015)",
+							vAxis: {title: "% of GDP"},
+							hAxis: {title: "Country"},
+							seriesType: "bars",
+							}
+			var chart = new google.visualization.ComboChart(
+				document.getElementById("Spendinggraph")
+			)
+			chart.draw(data,options)
+		} 
+		function MilcompareResponseHandler1(response) { 
+			var data = response.getDataTable(); 
+			var options = {height: 400, 
+							title: "2015 Education and Healthcare Spending to Military Spending (Billions)",
+							vAxis: {title: "Country"},
+							hAxis: {title: "Difference in Spending Compared to Military"},
+							}
+			var chart = new google.visualization.BarChart(
+				document.getElementById("Militarycomparesion")
+			)
+			chart.draw(data,options)
+		}
+		function EducationgrowthResponseHandler1(response) { 
+			var data = response.getDataTable()
+			var options = {
+				height: 400,
+			}
+			var chart = new google.visualization.GeoChart(
+				document.getElementById("EduGrowthgraph")
+			)
+			chart.draw(data,options);
+		} 
+		function EducationgrowthResponseHandler2(response) { 
+			var data = response.getDataTable(); 
+			var options = {
+				height: 400,
+			}
+			var chart = new google.visualization.GeoChart(
+				document.getElementById("EduGrowthgraph2")
+			)
+			chart.draw(data,options);
+		}
+		function HCgrowthResponseHandler1(response) { 
+			var data = response.getDataTable(); 
+			var options = {
+				height: 400,
+			}
+			var chart = new google.visualization.GeoChart(
+				document.getElementById("HealthcareGrowthgraph")
+			)
+			chart.draw(data,options);
+		}
+		function HCgrowthResponseHandler2(response) { 
+			var data = response.getDataTable(); 
+			var options = {
+				height: 400,
+			}
+			var chart = new google.visualization.GeoChart(
+				document.getElementById("HealthcareGrowthgraph2")
+			)
+			chart.draw(data,options);
+		}
+		function EduPPResponseHandler1(response) { 
+			var data = response.getDataTable();
+			var options = {height: 400, 
+							title: "2015 Education Spending Per Capita to 2015 GDP Per Capita",
+							vAxis: {title: "GDP PP"},
+							hAxis: {title: "Education Spending PP"},
+							bubble: {textStyle: {color: "none"}},
+							}
+			var chart = new google.visualization.BubbleChart(
+				document.getElementById("EduPPgraph")
+			)
+			chart.draw(data,options);
+		} 
+		function HCPPResponseHandler1(response) { 
+			var data = response.getDataTable(); 
+			var options = {height: 400, 
+							title: "2018 Healthcare Spending Per Capita to 2018 GDP Per Capita",
+							vAxis: {title: "GDP PP"},
+							hAxis: {title: "Healthcare Spending PP"},
+							bubble: {textStyle: {color: "none"}}
+							}
+			
+			var chart = new google.visualization.BubbleChart(
+				document.getElementById("HealthcarePPgraph")
+			)
+			chart.draw(data,options);
+		} 
+		function MilPPResponseHandler1(response) { 
+			var data = response.getDataTable(); 
+			var options = {height: 400, 
+							title: "2018 Military Spending Per Capita vs 2018 GDP Per Capita",
+							vAxis: {title: "GDP per capita ($)"},
+							hAxis: {title: "Military Spending Per Capita ($)"},
+							bubble: {textStyle: {color: "none"}}
+							}
+			var chart = new google.visualization.BubbleChart(
+				document.getElementById("MilitaryPPgraph")
+			)
+		chart.draw(data,options);
+		} 
+	</script>
+	
+	
+</head>
+
+<body>
+	<div id="main">
+		<div id="header">
+			<div id="title">
+				<div id="title_text">
+					<h1>DATS 6401 Individual Project 1</h1>
+					<h2>Hanbyeol Choi</h2>
+				</div> 
+			</div> 
+			
+			<div id="tabs1">
+				<ul id="tabs2">
+					<li><a href="introduction.html">Introduction</a></li>
+					<li class="selected"><a href="visualizations.html">Visualizations</a></li>
+				</ul> 
+			</div> 
+		</div> 
+		
+		
+		<div id="website_content">
+			<div id="content">
+				<h1>Data Visualizations</h1>
+				<h2>EDUCATION SPENDING</h2>
+				<div id="Edugraph1" style="width: 825px; height: 400px;"></div>
+				<h2>HEALTHCARE SPENDING</h2>
+				<div id="Healthcaregraph" style="width: 825px; height: 400px;"></div>
+				<h2>MILITARY SPENDING</h2>
+				<div id="Militarygraph" style="width: 825px; height: 400px;"></div>
+				<h2>SPENDING DATA COMPARED TO COUNTRY GDP</h2>
+				<div id="Spendinggraph" style="width: 825px; height: 400px;"></div>
+				<h2>EDUCATION AND HEALTHCARE DATA COMPARED TO MILITARY SPENDING</h2>
+				<div id="Militarycomparesion" style="width: 825px; height: 400px;"></div>
+				<h2>PER CAPITA COMPARISON - 2015 EDUCATION AND GDP</h2>
+				<div id="EduPPgraph" style="width: 825px; height: 400px;"></div>
+				<h2>PER CAPITA COMPARISON - 2018 HEALTHCARE AND GDP</h2>
+				<div id="HealthcarePPgraph" style="width: 825px; height: 400px;"></div>
+				<h2>PER CAPITA COMPARISON - 2018 MILITARY AND GDP</h2>
+				<div id="MilitaryPPgraph" style="width: 825px; height: 400px;"></div>
+				<h2>EDUCATION SPENDING OVER TIME</h2>
+				<h2>Change in Education Spending from 2011-2015 (Billions)</h2>
+				<div id="EduGrowthgraph2" style="width: 825px; height: 400px;"></div>
+				<h2>Change in Education Spending from 2011-2015 (Percent Change)</h2>
+				<div id="EduGrowthgraph" style="width: 825px; height: 400px;"></div>
+				<h2>HEALTHCARE SPENDING OVER TIME</h2>
+				<h2>Change in Healthcare Spending from 2014-2018 (Billions)</h2>
+				<div id="HealthcareGrowthgraph2" style="width: 825px; height: 400px;"></div>
+				<h2>Change in Healthcare Spending from 2014-2018 (Percent Change)</h2>
+				<div id="HealthcareGrowthgraph" style="width: 825px; height: 400px;"></div>
+		
+			</div> 
+		</div> 
+	</div>
+
+</body>
+
+</html>
